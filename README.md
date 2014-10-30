@@ -1,67 +1,50 @@
-# AIP Developer Workshop
+# workshop tutorial
 
-## Tutorial Application
+An [AIP](http://www.araport.org) Science App created using [Yeoman](http://yeoman.io)
+and the [AIP science app generator](https://www.npmjs.org/package/generator-aip-science-app).
 
-This 
+## App Code
 
-## Tutorial 1
+Your application code is in the `app/` subdirectory:
 
-In this tutorial you will create and run your first science app.
+```
+.
++-- app/
+|   +-- app.html
+|   +-- scripts/
+|       +-- app.js
+|   +-- styles/
+|       +-- app.css
 
-```bash
-git checkout tutorial/1
 ```
 
-Objectives:
+## Development
 
-1. Use the app generator to scaffold your application
-2. Use the `grunt` command to run the application
-3. Clone this tutorial repository to guide you through the rest of the tutorials
-
-## Tutorial 2
-
-In this tutorial you will learn how to determine if the user accessing your
-application is logged in and how to call an API (`/profiles`) in the context
-of that user.
-
-Objectives:
-
-1. Obtain Araport API credentials in order to use Araport APIs
-2. Understand how users are authenticated to your application
-3. Understand how to access the current user's API token
-4. Calling Araport APIs with the user's bearer token
+You can interactively develop your app using the built-in test runner. Simply
+execute this command from within the base directory of your app:
 
 ```bash
-git checkout tutorial/2
+$ grunt
 ```
 
-## Tutorial 3
+This will run your application on a local server at
+[http://localhost:9000](http://localhost:9000). It will also watch your
+app code for changes and automatically reload the browser when it detects
+changes.
 
-In this tutorial you will learn how to discover and call Araport Data APIs.
-
-Objectives:
-
-1. Understand how to discover Data APIs published in Araport
-2. Call a Data API from your application
-3. Create a form to query a Data API and display the results in a table
-4. Understand how to incorporate a third-party dependency in your application
+You can also run the test runner app in "production" mode with the command:
 
 ```bash
-git checkout tutorial/3
+$ grunt serve:dist
 ```
 
-## Tutorial 4
+This will start the same server, but without source code monitoring (live reload)
+and will also permit connections from outside, for example if you wanted to host
+the app yourself on a publicly accessible server.
 
-In this tutorial you will learn how to deploy your application for use on
-https://www.araport.org/apps
+## Deployment
 
-Objectives:
+When you are ready you can upload your application to the
+[AIP Science Apps Workspace](http://www.araport.org/apps).
 
-1. Understand how to create a "release" of your application
-2. Learn how to deploy your application to https://www.araport.org
-3. Learn how to configure your workspace on https://www.araport.org/apps
-4. Understand how to release an "update" to an application you have already deployed
-
-```bash
-git checkout tutorial/4
-```
+** More details coming soon! **
