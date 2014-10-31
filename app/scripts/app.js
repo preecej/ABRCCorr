@@ -10,34 +10,66 @@
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
 
-    Agave.api.profiles.me({}, function(resp) {
-      /*
-       * The parsed JSON response from Agave is in `resp.obj`.
-       * Other data available in resp include headers, request
-       * metadata, and the raw response data string. The Agave
-       * Profile object is the `result` attribute of the Agave
-       * response object.
-       */
-      var profile = resp.obj.result;
-      console.log(JSON.stringify(profile, null, 2));
+    /*
+     * ADAMA - Araport Data API Mediator API
+     * getStatus()
+     * getNamespaces()
+     * getServices()
+     * search()
+     *
+     * Data APIs
+     * {"namespace": "aip", "service": "atted_coexpressed_by_locus_v0.1"}
+     * {"namepsace": "aip", "service": "locus_gene_report_v0.1"}
+     */
+    var form = $('form[name=workshop-tutorial-query]', appContext);
+    form.on('submit', function(e) {
+      e.preventDefault();
 
-      $('.profile-name', appContext).text(profile.username);
+      // clear error messages
+      $('.messages', this).empty();
+      $('.has-error', this).removeClass('has-error');
 
-      var vcard = $('.vcard', appContext);
-      vcard.find('.fn').text(profile.full_name);
-      vcard.find('.email').text(profile.email);
-      vcard.find('.tel-primary').text(profile.phone || 'not specified');
-      vcard.find('.tel-secondary').text(profile.mobile_phone || 'not specified');
+      var query = {
+        locus: this.locus.value,
+        relationship_type: this.relationship_type.value,
+        threshold: this.threshold.value
+      };
 
-      /* do some date parsing */
-      var parsedDate = profile.create_time.replace(
-        /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,
-        '$1-$2-$3T$4:$5:$6'
-      );
-      vcard.find('.note').text(new Date(parsedDate).toLocaleString());
+      // basic validate
+      var hasError = false;
+      if (! query.locus) {
+        $(this.locus).parent().addClass('has-error');
+        $('.messages', this).append('<div class="alert alert-danger">Locus is required</div>');
+        hasError = true;
+      }
 
-      vcard.removeClass('hide');
+      if (! query.threshold) {
+        $(this.threshold).parent().addClass('has-error');
+        $('.messages', this).append('<div class="alert alert-danger">Threshold is required</div>');
+        hasError = true;
+      } else if (! /(\d+\.)?\d+/.test(query.threshold)) {
+        $(this.threshold).parent().addClass('has-error');
+        $('.messages', this).append('<div class="alert alert-danger">Threshold must be numeric</div>');
+        hasError = true;
+      }
+
+      if (! hasError) {
+        $('.results').html('<pre><code>' + JSON.stringify(query, null, 2) + '</code></pre>');
+      }
+
+      // Agave.api.adama.getStatus({}, function(resp) {
+      //   if (resp.obj.status === 'success') {
+      //     Agave.api.adama.search({'namespace': 'aip', 'service': 'atted_coexpressed_by_locus_v0.1', 'queryParams': query}, function(result) {
+      //       $('.results').html('<pre><code>' + JSON.stringify(result, null, 2) + '</code></pre>');
+      //     });
+      //   } else {
+      //     // ADAMA is not available, show a message
+      //     $('.messages', this).append('<div class="alert alert-danger">The Query Service is currently unavailable. Please try again later.</div>');
+      //   }
+      // });
+
     });
+
   });
 
 })(window, jQuery);
