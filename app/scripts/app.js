@@ -10,7 +10,7 @@
   var templates = {
     resultTable: _.template('<table class="table"><thead><th>Related Locus</th><th>Direction</th><th>Score</th></thead><tbody><% _.each(result, function(r) { %><%= resultRow(r) %><% }); %></tbody></table>'),
     resultRow: _.template('<% for (var i = 0; i < relationships.length; i++) { %><tr><% if (i === 0) { %><td rowspan="<%= relationships.length %>"><%= related_entity %> <button type="button" class="btn btn-info" name="gene-report" data-locus="<%= related_entity %>"><i class="fa fa-book"></i><span class="sr-only">Get Gene Report</button></td><% } %><td><%= relationships[i].direction %></td><td><% _.each(relationships[i].scores, function(score){ %><%= _.values(score)[0] %><% }); %></td></tr><% } %>'),
-    geneReport: _.template('<div class="gene-report"><button type="button" class="close">&times;</button><h1><%= locus %></h1><% _.each(properties, function(prop) { %><h2><%= prop.type.replace("_"," ") %></h2><p><%= prop.value %></p><% }) %></div>')
+    geneReport: _.template('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4>Gene Report: <%= locus %></h4></div><div class="modal-body"><% _.each(properties, function(prop) { %><h3><%= prop.type.replace("_"," ") %></h3><p><%= prop.value %></p><% }) %></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>')
   };
 
   /*
@@ -81,22 +81,13 @@
               Agave.api.adama.search(
                 {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': {'locus': locus}},
                 function(search) {
-                  var el, td, tr;
-                  el = $(templates.geneReport(search.obj.result[0]));
-                  el.hide();
-
-                  td = $('<td colspan="3">');
-                  tr = $('<tr>');
-
-                  tr.append(td.append(el));
-                  tr.insertAfter(btn.parent().parent());
-
-                  el.slideDown();
-                  $('button.close', el).on('click', function() {
-                    el.slideUp().promise().done(function() { tr.remove(); });
-                  });
+                  $(templates.geneReport(search.obj.result[0])).appendTo('body').modal();
                 }
               );
+            });
+
+            $('.results table', appContext).dataTable({
+              'order': [[ 2, 'desc' ]]
             });
           });
       } else {
