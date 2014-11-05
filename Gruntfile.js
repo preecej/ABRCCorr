@@ -145,7 +145,10 @@ module.exports = function(grunt) {
       target: {
         src: [
           'index.html'
-        ]
+        ],
+        options: {
+          exclude: [ /jquery\.js$/, /jquery\.min\.js$/ ]
+        }
       }
     },
 
