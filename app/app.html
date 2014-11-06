@@ -1,36 +1,31 @@
-<div class="science-app" data-app-name="workshop-tutorial">
-  <h2>Hello, <span class="profile-name">AIP Science App</span>!</h2>
+<div class="group-app" data-app-name="BOB">
 
-  <form method="post" name="workshop-tutorial-query">
-    <div class="messages"></div>
-    <div class="row">
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label class="control-label" for="wt_locus">Locus</label>
-          <input class="form-control" type="text" name="locus" id="wt_locus" placeholder="For example, AT2G39730" value="AT2G39730">
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label class="control-label" for="wt_relationship_type">Relationship type</label>
-          <select class="form-control" name="relationship_type" id="_wtrelationship_type">
-            <option value="correlation_coefficient">Correlation coefficient</option>
-            <option value="mutual_rank">Mutual rank</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <label class="control-label" for="wt_threshold">Threshold</label>
-          <input class="form-control" type="number" name="threshold" id="wt_threshold" placeholder="Threshold" value="0.85" step="0.01" min="0">
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Search</button>
-    </div>
-  </form>
-
-  <div class="results">
+<form method="post" name="group-app-query">
+ 
+  <div class="col-md-4">
+  	<div class="form-group">
+  		<label class="control-label" for="wt_locus">Enter a gene ID
+  		</label>
+  		<input class="form-control" type="text" name="locus" id="wt_locus" placeholder="For example, AT2G39730" value="AT2G39730">
+  	</div>
+  	<div class="form-group">
+  		<label class="control-label" for="wt_locus_list">Enter a list of gene IDs
+  		</label>
+  		<textarea class="form-control" rows="10" name="locus_list" is="wt_locus_list"></textarea>
+  	</div>
+  	<div class="checkbox">
+  		<label>
+  			<input type="checkbox" value="" name="go_check" />
+  			Ontology terms
+  		</label>
+  	</div>
   </div>
+
+  <div class="col-md-8" style="border: solid 1px lightgrey; height: 500px;">
+  	<br />Cytoscape stuff coming from Jeff
+	include "graphDiv.html"
+  </div>
+
+</form>	
+
 </div>
