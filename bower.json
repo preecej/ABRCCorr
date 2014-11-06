@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "DataTables": "~1.10.3",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "cytoscape": "~2.3.4"
   }
 }
