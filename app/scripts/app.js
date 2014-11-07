@@ -1,6 +1,7 @@
 /*global _*/
 /*jshint camelcase: false*/
-(function(window, $, _, undefined) {
+/*global cytoscape*/
+(function(window, $, _,cytoscape, undefined) {
   'use strict';
 
   console.log('Hello, workshop tutorial!');
@@ -98,4 +99,226 @@
 
   });
 
-})(window, jQuery, _);
+    /**
+     * @param1 Network 1
+     * {
+     *  name : string
+     *  source : string
+     *  edges : {
+     *      color : string[hex-code]
+     *      edge : [
+     *              {
+     *                   target : "agi"
+     *                  source : "agi"
+     *                  weight : int
+     *              },
+     *              {...}
+     *          ]
+     *      }
+     * }
+     * @param2 Network 2
+     * ...
+     * @paramN network N
+     */
+
+
+    var addNodes = function(cyto, network){
+        var color = network.edges.color;
+        var maxEdge = 0;
+        $.each(network.edges.edge,function(index,obj) {
+
+            if(obj.weight > maxEdge){
+                maxEdge = obj.weight;
+            }
+
+            var $source;
+            if ((cyto.nodes('#' + obj.source)).length > 0) {
+                $source = cyto.nodes('#' + obj.source);
+            } else {
+                $source = cyto.add({
+                    group: "nodes",
+                    name : 'bob',
+                    data: {id: obj.source},
+                    position : {
+                        x : 100,
+                        y : 100
+                    },
+                    css : {
+                        'height': '10px',
+                        'width':'10px',
+                        'background-color' : 'black'
+                    }
+                });//.css({'height': '10px','width':'10px','background-color' : 'black'});
+            }
+
+            var $target;
+            if ((cyto.nodes('#' + obj.target)).length > 0) {
+                $target = cyto.nodes('#' + obj.target);
+            } else {
+                $target = cyto.add({
+                    group: "nodes",
+                    name: 'bob',
+                    data: {id: obj.target},
+                    position : {
+                        x : 100,
+                        y : 100
+                    },
+                    css : {
+                        'height': '10px',
+                        'width':'10px',
+                        'background-color' : 'black'
+                    }
+                });//.css();
+            }
+        });
+
+        $.each(network.edges.edge,function(index,obj){
+            var edgeWeight = (obj.weight / maxEdge) * 10;
+            if( edgeWeight < 1 ){
+                edgeWeight = 1;
+            }
+            cyto.add({
+                group: "edges",
+                data: {
+                    id: network.name+"-"+obj.source+"-"+obj.target,
+                    source: obj.source,
+                    target: obj.target,
+                    weight: obj.weight
+                },
+                'curve-style': 'bezier'
+            }).css({'line-color' : color, 'width' : edgeWeight});
+
+        });
+    };
+
+    var init = function(){
+        var numNetworks = arguments.length;
+        var args = arguments;
+        var cyto = cytoscape({
+
+            container: document.getElementById('cytoscape_div'),
+
+            layout: {
+                name: 'grid',
+                padding: 10
+            },
+            //elements: {
+            //    nodes: [
+            //        { data: { id: 'j', name: 'Jerry' } },
+            //        { data: { id: 'e', name: 'Elaine' } },
+            //        { data: { id: 'k', name: 'Kramer' } },
+            //        { data: { id: 'g', name: 'George' } }
+            //    ],
+            //    edges: [
+            //        { data: { source: 'j', target: 'e' } },
+            //        { data: { source: 'j', target: 'k' } },
+            //        { data: { source: 'j', target: 'g' } },
+            //        { data: { source: 'e', target: 'j' } },
+            //        { data: { source: 'e', target: 'k' } },
+            //        { data: { source: 'k', target: 'j' } },
+            //        { data: { source: 'k', target: 'e' } },
+            //        { data: { source: 'k', target: 'g' } },
+            //        { data: { source: 'g', target: 'j' } }
+            //    ]
+            //},
+            style: cytoscape.stylesheet(),
+            ready: function(){
+
+
+
+
+                for (var i = 0 ; i < numNetworks; i++){
+                    addNodes(cyto,args[i]);
+                    var j = 1;
+                }
+
+                cyto.layout({
+                    name:'circle',
+                    minNodeSpacing: 10,
+                    avoidOverlap:true,
+                    height: 1000,
+                    width: 1000,
+                    startAngle : 3/2 * Math.PI
+                });
+
+                cyto.zoom(1,{x:0,y:0});
+                cyto.fit(cyto.nodes(),100);
+                cyto.nodes().css({'width':'20px','height':'20px'});
+                console.log('Finished & Resized');
+            }
+
+        });
+
+        var i = 1;
+        //cyto.startBatch();
+
+        //cyto.endBatch();
+        //cyto.makeLayout({
+        //    name: 'preset'
+        //});
+
+    };
+
+
+
+
+    init({
+        name : 'networktest',
+        source : 'data sorce',
+        edges : {
+            color : '#0000FF',
+            edge : [
+                {
+                    target : 'node2',
+                    source : 'node1',
+                    weight : 10000
+                },
+                {
+                    target : 'node3',
+                    source : 'node1',
+                    weight : 25000
+                },
+                {
+                    target : 'node4',
+                    source : 'node1',
+                    weight : 99000
+                },
+                {
+                    target : 'node6',
+                    source : 'node1',
+                    weight : 20
+                }
+            ]
+        }
+    },{
+        name : 'networktest2',
+        source : 'data sorce',
+        edges : {
+            color : '#000000',
+            edge : [
+                {
+                    target : 'node2',
+                    source : 'node1',
+                    weight : 1
+                },
+                {
+                    target : 'node3',
+                    source : 'node1',
+                    weight : 2
+                },
+                {
+                    target : 'node4',
+                    source : 'node1',
+                    weight : 10
+                },
+                {
+                    target : 'node6',
+                    source : 'node1',
+                    weight : 20
+                }
+            ]
+        }
+    });
+
+
+})(window, jQuery, _,cytoscape);
