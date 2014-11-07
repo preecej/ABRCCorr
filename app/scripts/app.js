@@ -8,6 +8,21 @@
 
   var appContext = $('[data-app-name="workshop-tutorial"]');
 
+
+    var nodeClick = function(evt){
+        var locus = evt.cyTarget.id();
+
+
+        window.Agave.api.adama.search( //
+            {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': {'locus': locus}},
+
+            function(search) {
+                var name=_.findWhere(search.obj.result[0].properties,{type:'name'}).value;
+                $('#details').text(locus+' -> '+name);
+            }
+        );
+    };
+
   /*
    * ADAMA - Araport Data API Mediator API
    * getStatus()
@@ -29,19 +44,6 @@
             relationship_type: 'correlation_coefficient',
             threshold: 0.8
         };
-
-        Agave.api.adama.search( // 
-            {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': {'locus': query.locus}},
-
-            function(search) {
-                var report=search.obj.result[0];
-               console.log(report);
-               console.log(report.properties);
-               var name=_.findWhere(report.properties,{type:'name'}).value;
-               //$(templates.geneReport(search.obj.result[0])).appendTo('body').modal(); //TBD where we want to go with this
-                console.log(name);
-            }
-        );
 
         var attedNetwork = {};
 
@@ -93,7 +95,8 @@
                                     edges.edge.push(edge);
                                 });
                                 abrcNetwork.edges = edges;
-                                init(attedNetwork,abrcNetwork);
+                                var defaultNode = query.locus;
+                                init(attedNetwork,abrcNetwork,defaultNode);
                             }
                         );
 
@@ -161,7 +164,7 @@
                         'width':'10px',
                         'background-color' : 'black'
                     }
-                });//.css({'height': '10px','width':'10px','background-color' : 'black'});
+                });
             }
 
             var $target;
@@ -181,7 +184,7 @@
                         'width':'10px',
                         'background-color' : 'black'
                     }
-                });//.css();
+                });
             }
         });
 
@@ -221,7 +224,7 @@
 
 
 
-                for (var i = 0 ; i < numNetworks; i++){
+                for (var i = 0 ; i < numNetworks - 1; i++){
                     addNodes(cyto,args[i]);
                 }
 
@@ -242,68 +245,12 @@
 
         });
 
+        cyto.on('tap', 'node',nodeClick);
+         nodeClick({cyTarget : { id: function () {return args[numNetworks-1];}}});
+
     };
 
 
-/*
 
-    init({
-        name : 'networktest',
-        source : 'data sorce',
-        edges : {
-            color : '#0000FF',
-            edge : [
-                {
-                    target : 'node2',
-                    source : 'node1',
-                    weight : 10000
-                },
-                {
-                    target : 'node3',
-                    source : 'node1',
-                    weight : 25000
-                },
-                {
-                    target : 'node4',
-                    source : 'node1',
-                    weight : 99000
-                },
-                {
-                    target : 'node6',
-                    source : 'node1',
-                    weight : 20
-                }
-            ]
-        }
-    },{
-        name : 'networktest2',
-        source : 'data sorce',
-        edges : {
-            color : '#000000',
-            edge : [
-                {
-                    target : 'node2',
-                    source : 'node1',
-                    weight : 1
-                },
-                {
-                    target : 'node3',
-                    source : 'node1',
-                    weight : 2
-                },
-                {
-                    target : 'node4',
-                    source : 'node1',
-                    weight : 10
-                },
-                {
-                    target : 'node6',
-                    source : 'node1',
-                    weight : 20
-                }
-            ]
-        }
-    });
-*/
 
 })(window, jQuery, _,cytoscape);
