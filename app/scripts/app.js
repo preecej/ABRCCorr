@@ -30,6 +30,18 @@
             threshold: 0.8
         };
 
+        Agave.api.adama.search( // 
+            {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': {'locus': query.locus}},
+
+            function(search) {
+                var report=search.obj.result[0];
+               console.log(report);
+               console.log(report.properties);
+               var name=_.findWhere(report.properties,{type:'name'}).value;
+               //$(templates.geneReport(search.obj.result[0])).appendTo('body').modal(); //TBD where we want to go with this
+                console.log(name);
+            }
+        );
 
         var attedNetwork = {};
 
