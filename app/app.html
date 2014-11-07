@@ -4,14 +4,14 @@
  
   <div class="col-md-4">
   	<div class="form-group">
-  		<label class="control-label" for="wt_locus">Enter a gene ID
+  		<label class="control-label" for="wt_locus">Enter a Locus ID (gene)
   		</label>
   		<input class="form-control" type="text" name="locus" id="wt_locus" placeholder="For example, AT2G39730" value="AT2G39730">
   	</div>
   	<div class="form-group">
-  		<label class="control-label" for="wt_locus_list">Enter a list of gene IDs
+  		<label class="control-label" for="wt_locus_list">Enter a List of Locus IDs (genes)
   		</label>
-  		<textarea class="form-control" rows="10" name="locus_list" is="wt_locus_list"></textarea>
+  		<textarea class="form-control" rows="13" name="locus_list" is="wt_locus_list"></textarea>
   	</div>
   	<div class="checkbox">
   		<label>
@@ -21,11 +21,14 @@
   	</div>
   </div>
 
-  <div class="col-md-8" style="border: solid 1px lightgrey; height: 500px;">
-  	<br />Cytoscape stuff coming from Jeff
-	include "graphDiv.html"
+  <div class="col-md-8">
+  	<label class="control-label" for="cytoscape_view">Cytoscape View</label>
+  	<div style="border: solid 1px lightgrey; height: 400px;">
+  	include "graphDiv.html"
+  	</div>
   </div>
 
+  <hr />
 </form>	
 
 </div>
