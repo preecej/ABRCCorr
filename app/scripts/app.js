@@ -27,22 +27,67 @@
         var query = {
             locus: $('#wt_locus').val(),
             relationship_type: 'correlation_coefficient',
-            threshold: 0.7
+            threshold: 0.8
         };
 
 
-        var network = {};
-        //var edges ={};
-        network.name = 'ATTED';
-        network.source = 'atted_coexpressed_by_locus_v0.1';
+        var attedNetwork = {};
+
+        attedNetwork.name = 'ATTED';
+        attedNetwork.source = 'atted.jp project';
         //blue & red
         Agave.api.adama.getStatus({}, function(resp) { // for parameter1
             if (resp.obj.status === 'success') {
                 Agave.api.adama.search(
                     {'namespace': 'aip', 'service': 'atted_coexpressed_by_locus_v0.1', 'queryParams': query},
                     function(search) {
-                        //var edges = {'color' : 'blue'};
-                       console.log(search);
+
+                        var edges = {
+                            color : 'blue',
+                            edge : []
+                        };
+
+                        $.each(search.obj.result,function(index,pair){
+                            var edge = {
+                                source : query.locus,
+                                target : pair.related_entity,
+                                weight : pair.relationships[0].scores[0].correlation_coefficient
+                            };
+                            edges.edge.push(edge);
+                        });
+
+                        attedNetwork.edges = edges;
+
+                        //init(attedNetwork);
+
+                        var abrcNetwork = {};
+                        abrcNetwork.name = 'ABRC Ordering Data';
+                        abrcNetwork.source = 'The ABRC - OSU';
+                        Agave.api.adama.search(
+                            {'namespace':'tkdbb84','service':'abrc_coordering_by_locus_v0.3','queryParams':{'locus':query.locus }},
+                            function(response){
+                                var edges = {
+                                    color : 'red',
+                                    edge : []
+                                };
+                                $.each(response.obj.result, function(index,pair){
+                                    //console.log(pair);
+                                    var key = Object.keys(pair)[0];
+                                    var edge = {
+                                        target : key,
+                                        source : query.locus,
+                                        weight : pair[key]
+                                    };
+                                    edges.edge.push(edge);
+                                });
+                                abrcNetwork.edges = edges;
+                                init(attedNetwork,abrcNetwork);
+                            }
+                        );
+
+
+                        /* all the code above again.... */
+
 
                     });
             } else {
@@ -188,7 +233,7 @@
     };
 
 
-
+/*
 
     init({
         name : 'networktest',
@@ -247,6 +292,6 @@
             ]
         }
     });
-
+*/
 
 })(window, jQuery, _,cytoscape);
