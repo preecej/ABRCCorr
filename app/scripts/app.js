@@ -136,7 +136,7 @@
                 $source = cyto.nodes('#' + obj.source);
             } else {
                 $source = cyto.add({
-                    group: "nodes",
+                    group: 'nodes',
                     name : 'bob',
                     data: {id: obj.source},
                     position : {
@@ -156,7 +156,7 @@
                 $target = cyto.nodes('#' + obj.target);
             } else {
                 $target = cyto.add({
-                    group: "nodes",
+                    group: 'nodes',
                     name: 'bob',
                     data: {id: obj.target},
                     position : {
@@ -178,9 +178,9 @@
                 edgeWeight = 1;
             }
             cyto.add({
-                group: "edges",
+                group: 'edges',
                 data: {
-                    id: network.name+"-"+obj.source+"-"+obj.target,
+                    id: network.name+'-'+obj.source+'-'+obj.target,
                     source: obj.source,
                     target: obj.target,
                     weight: obj.weight
@@ -202,25 +202,6 @@
                 name: 'grid',
                 padding: 10
             },
-            //elements: {
-            //    nodes: [
-            //        { data: { id: 'j', name: 'Jerry' } },
-            //        { data: { id: 'e', name: 'Elaine' } },
-            //        { data: { id: 'k', name: 'Kramer' } },
-            //        { data: { id: 'g', name: 'George' } }
-            //    ],
-            //    edges: [
-            //        { data: { source: 'j', target: 'e' } },
-            //        { data: { source: 'j', target: 'k' } },
-            //        { data: { source: 'j', target: 'g' } },
-            //        { data: { source: 'e', target: 'j' } },
-            //        { data: { source: 'e', target: 'k' } },
-            //        { data: { source: 'k', target: 'j' } },
-            //        { data: { source: 'k', target: 'e' } },
-            //        { data: { source: 'k', target: 'g' } },
-            //        { data: { source: 'g', target: 'j' } }
-            //    ]
-            //},
             style: cytoscape.stylesheet(),
             ready: function(){
 
@@ -229,7 +210,6 @@
 
                 for (var i = 0 ; i < numNetworks; i++){
                     addNodes(cyto,args[i]);
-                    var j = 1;
                 }
 
                 cyto.layout({
@@ -248,14 +228,6 @@
             }
 
         });
-
-        var i = 1;
-        //cyto.startBatch();
-
-        //cyto.endBatch();
-        //cyto.makeLayout({
-        //    name: 'preset'
-        //});
 
     };
 
