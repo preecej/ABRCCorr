@@ -39,10 +39,16 @@
 
         var Agave = window.Agave;
 
+        var thresh = $('#thresh').val();
+        if(thresh === 0 || thresh === ''){
+            thresh = 0.8;
+            $('#thresh').val(0.8);
+        }
+
         var query = {
             locus: $('#wt_locus').val(),
             relationship_type: 'correlation_coefficient',
-            threshold: 0.8
+            threshold: thresh
         };
 
         var attedNetwork = {};
